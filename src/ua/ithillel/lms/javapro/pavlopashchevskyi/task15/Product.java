@@ -12,6 +12,8 @@ public class Product {
 
   private boolean isDiscountable;
 
+  private double discount;
+
   private LocalDateTime additionDate;
 
   /**
@@ -26,6 +28,7 @@ public class Product {
     this.type = type;
     this.price = price;
     this.isDiscountable = false;
+    this.discount = 0.00;
     this.additionDate = LocalDateTime.now();
   }
 
@@ -52,6 +55,14 @@ public class Product {
 
   public void setDiscountable(boolean discountable) {
     isDiscountable = discountable;
+  }
+
+  public double getDiscount() {
+    return discount;
+  }
+
+  public void setDiscount(double discount) {
+    this.discount = discount < 0 ? 0 : (discount > 1 ? 1 : discount);
   }
 
   public LocalDateTime getAdditionDate() {

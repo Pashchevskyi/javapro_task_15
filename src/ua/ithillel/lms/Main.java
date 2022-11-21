@@ -26,12 +26,14 @@ public class Main {
     ProductManager pm = new ProductManager(products);
 
     System.out.println("Expensive books:"); // Task 1.2
-    List<Product> filteredProducts = pm.getExpansiveBooks();
+    List<Product> filteredProducts = pm.getExpansiveBooks(250);
     System.out.println(ProductManager.output(filteredProducts));
 
     System.out.println("Discounted books"); // Task 2.1
     book1.setDiscountable(true);
+    book1.setDiscount(0.2);
     book4.setDiscountable(true);
+    book4.setDiscount(0.1);
     List<Product> discountedProducts = pm.applyDiscountToBooks();
     System.out.println(ProductManager.output(discountedProducts));
 

@@ -24,16 +24,17 @@ public class ProductManager {
   /**
    * Gets Product instances, which type is "book" and price is greater than 250
    *
+   * @param minPrice books, which costs greater than this price, is considered expensive
    * @return List<Product>
    */
-  public List<Product> getExpansiveBooks() {
+  public List<Product> getExpansiveBooks(double minPrice) {
     return products.stream()
-        .filter(p -> p.getPrice() > 250 && "Book".equalsIgnoreCase(p.getType()))
+        .filter(p -> p.getPrice() > minPrice && "Book".equalsIgnoreCase(p.getType()))
         .collect(Collectors.toList());
   }
 
   /**
-   * Gets Product instances, which type is "book" and they are discountable. Makes discount 10% and
+   * Gets Product instances, which type is "book" and they are discountable. Makes discount and
    * returns list after that.
    *
    * @return List<Product>
@@ -41,7 +42,7 @@ public class ProductManager {
   public List<Product> applyDiscountToBooks() {
     return products.stream()
         .filter(p -> p.isDiscountable() && "Book".equalsIgnoreCase(p.getType()))
-        .peek(p -> p.setPrice(p.getPrice() - p.getPrice() * 0.1))
+        .peek(p -> p.setPrice(p.getPrice() - p.getPrice() * p.getDiscount()))
         .collect(Collectors.toList());
   }
 
@@ -52,13 +53,10 @@ public class ProductManager {
    * @throws ProductNotFoundException when list of Product instances is empty.
    */
   public Product getTheCheapestBook() throws ProductNotFoundException {
-    if (products.stream().noneMatch(p -> "Book".equalsIgnoreCase(p.getType()))) {
-      throw new ProductNotFoundException("Book");
-    }
     return products.stream()
         .filter(p -> "Book".equalsIgnoreCase(p.getType()))
         .min(Comparator.comparing(Product::getPrice))
-        .orElseGet(() -> new Product("000-000-000", "", 0.00));
+        .orElseThrow(() -> new ProductNotFoundException("Book"));
   }
 
   /**
